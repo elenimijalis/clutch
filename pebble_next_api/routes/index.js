@@ -4,7 +4,7 @@ var router = express.Router();
 router.post('/nest_update', function(req, res, next) {
   console.log("Nest is currently updating...");
   console.log("\nREQUEST:\n");
-  console.log(req.body);
+  console.log(req.body.mode));
 });
 
 module.exports = router;
