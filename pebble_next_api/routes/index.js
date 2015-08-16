@@ -2,20 +2,37 @@ var express = require('express');
 var request = require('request');
 var router = express.Router();
 
-router.post('/nest_update', function(req, res, next) {
+router.post('/nest_update_temp', function(req, res, next) {
   console.log("Nest is currently updating...");
+  console.log("Switching to " + req.body.move + " mode!");
+  var nest_url = "https://developer-api.nest.com/devices/thermostats/wbEQifUE9PfijiJ2mBfW7bfjfUcO-J0l?auth=c.AbFNpVV3PvzztntF6ttP7kEMDOe56XM6uiFh2ZO2XEqjeCrXwzzczdldQzhX6yAGMyw7tYA8nfqgRuLr03WlwlXFVPKmccTX1rA7e3A2i06HFSdbD6cIWf8EUobHMHHygbtTVyDS0PSYlR4L";
+  var new_temp = req.body.temp;
+  var temp, hvac;
   request({
-    method: "PUT", 
-    url: "https://developer-api.nest.com/devices/thermostats/wbEQifUE9PfijiJ2mBfW7bfjfUcO-J0l?auth=c.AbFNpVV3PvzztntF6ttP7kEMDOe56XM6uiFh2ZO2XEqjeCrXwzzczdldQzhX6yAGMyw7tYA8nfqgRuLr03WlwlXFVPKmccTX1rA7e3A2i06HFSdbD6cIWf8EUobHMHHygbtTVyDS0PSYlR4L",
-    body: {"target_temperature_f": 65},
+    method: "GET", 
+    url: nest_url,
     json: true
   }, function(err, res, body) {
-    if (res) { console.log("Received a response from Nest"); }
-    if (err) { console.log("--- ERROR --- from Nest"); }
-    if (body) { console.log("Received a body from Nest"); }
+    temp = body.current_temperature
+    if (new_temp > temp) {
+      hvac = "heat";
+    } else {
+      hvac = "cool";
+    }
+    request({
+      method: "PUT", 
+      url: nest_url,
+      body: {"target_temperature_f": new_temp, "hvac_mode": hvac},
+      json: true
+    }, function(err, res, body) {
+      if (res) { console.log("Received a response from Nest"); }
+      if (err) { console.log("--- ERROR --- from Nest"); }
+      if (body) { console.log("Received a body from Nest"); }
+    });
+      console.log("Nest has been updated...");
+      res.end();
   });
-  console.log("Nest has been updated...");
-  res.end();
 });
+    
 
 module.exports = router;

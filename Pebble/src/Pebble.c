@@ -6,7 +6,7 @@
 
 #include <pebble.h>
 
-#define TAP_NOT_DATA true
+#define TAP_NOT_DATA false
 #define SLEEP_KEY 1
 #define RUN_KEY 2
 
@@ -66,13 +66,17 @@ static void data_handler(AccelData *data, uint32_t num_samples) {
   // Long lived buffer
   static char s_buffer[128];
 
-  // Compose string of all data
-  snprintf(s_buffer, sizeof(s_buffer), 
-    "N X,Y,Z\n0 %d,%d,%d\n1 %d,%d,%d\n2 %d,%d,%d", 
-    data[0].x, data[0].y, data[0].z, 
-    data[1].x, data[1].y, data[1].z, 
-    data[2].x, data[2].y, data[2].z
-  );
+  int xpos = data[0].x;
+  int xpos2 = data[128].x;
+  int diff = abs(xpos - xpos2);
+  APP_LOG(APP_LOG_LEVEL_INFO, "dif %d", diff);
+
+  if (diff > 500) {
+    APP_LOG(APP_LOG_LEVEL_INFO, "RUNNING");
+    send_int(RUN_KEY);
+    xpos = 0;
+    xpos2 = 0;
+  }
 
   //Show the data
   text_layer_set_text(s_output_layer, s_buffer);
