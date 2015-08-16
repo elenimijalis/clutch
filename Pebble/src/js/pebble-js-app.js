@@ -11,7 +11,7 @@ Pebble.addEventListener('appmessage', function(e) {
   if (e.payload.SLEEP_KEY) {
   	console.log("sleep");
   	ajax({
-  		url: 'http://clutch.io/nest_update',
+  		url: 'http://52.20.56.186/nest_update',
   		type:'json',
   		mode: "sleep"
   	}, function(data) {
@@ -22,7 +22,7 @@ Pebble.addEventListener('appmessage', function(e) {
   } else if (e.payload.RUN_KEY) {
   	console.log("run");
   	ajax({
-  		url: 'http://clutch.io/nest_update',
+  		url: 'http://52.20.56.186/nest_update',
   		type:'json',
   		mode: "run"
   	}, function(data) {

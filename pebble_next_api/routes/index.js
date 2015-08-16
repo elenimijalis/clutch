@@ -3,7 +3,7 @@ var router = express.Router();
 
 /* GET home page. */
 router.post('/nest_update', function(req, res, next) {
-  res.send("Hello World");
+  console.log("Nest is currently updating...");
 });
 
 module.exports = router;
