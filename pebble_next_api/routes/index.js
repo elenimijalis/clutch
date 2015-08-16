@@ -1,6 +1,7 @@
 var express = require('express');
 var request = require('request');
 var router = express.Router();
+var usertemp;
 
 // req - request details (parameters)
 // res - http response 
@@ -11,8 +12,9 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/', function(req, res) {
-    console.log("Temperature set to (F):");
+    console.log("Temperature set to:");
     console.log(req.body.temp);
+    usertemp = req.body.temp;
     res.send('Temperature submitted, now you may use your pebble!');
 }); 
 
@@ -22,8 +24,16 @@ router.post('/nest_update_temp', function(req, res, next) {
   var params = req.body;
   if (params.move) { console.log(params.move); }
   var nest_url = "https://developer-api.nest.com/devices/thermostats/wbEQifUE9PfijiJ2mBfW7bfjfUcO-J0l?auth=c.AbFNpVV3PvzztntF6ttP7kEMDOe56XM6uiFh2ZO2XEqjeCrXwzzczdldQzhX6yAGMyw7tYA8nfqgRuLr03WlwlXFVPKmccTX1rA7e3A2i06HFSdbD6cIWf8EUobHMHHygbtTVyDS0PSYlR4L";
-  var new_temp = req.params.temp;
-  var new_temp = req.body.temp; // variable
+
+  var new_temp;
+  if (usertemp == null) {
+    new_temp = req.params.temp;
+  }
+  else {
+    new_temp = usertemp;
+  }
+
+  // var new_temp = req.body.temp; // variable
   var temp, hvac;
   request({
     method: "GET", 
@@ -47,8 +57,8 @@ router.post('/nest_update_temp', function(req, res, next) {
       if (body) { console.log("Received a body from Nest"); }
     });
       console.log("Nest has been updated...");
+      res.end();
   });
-  res.end();
 });
     
 
