@@ -10,9 +10,9 @@ router.post('/nest_update', function(req, res, next) {
     body: {"target_temperature_f": 65},
     json: true
   }, function(err, res, body) {
-    console.log((res));
-    console.log(err);
-    console.log(body);
+    if (res) { console.log("Received a response from Nest"); }
+    if (err) { console.log("--- ERROR --- from Nest"); }
+    if (body) { console.log("Received a body from Nest"); }
   });
   console.log("Nest has been updated...");
   res.end();
