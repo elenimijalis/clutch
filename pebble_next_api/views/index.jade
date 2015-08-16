@@ -1,5 +1,16 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+    h1= title
+    form(name="add-estimation", method="post")
+        div.input
+            span.label Enter Target Temperature 
+            input(type="text", name="temp", placeholder="Degrees Fahrenheit")
+        div.actions
+            input(type="submit", value="submit")
+
+// generates html
+// create form
+// input and submit url
+// input named temp
+
