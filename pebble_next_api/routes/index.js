@@ -4,9 +4,11 @@ var router = express.Router();
 
 router.post('/nest_update_temp', function(req, res, next) {
   console.log("Nest is currently updating...");
-  console.log("Switching to " + req.body.move + " mode!");
+  console.log("Switching to " + req.param.move + " mode!");
+  var params = req.body;
+  if (params.move) { console.log(params.move); }
   var nest_url = "https://developer-api.nest.com/devices/thermostats/wbEQifUE9PfijiJ2mBfW7bfjfUcO-J0l?auth=c.AbFNpVV3PvzztntF6ttP7kEMDOe56XM6uiFh2ZO2XEqjeCrXwzzczdldQzhX6yAGMyw7tYA8nfqgRuLr03WlwlXFVPKmccTX1rA7e3A2i06HFSdbD6cIWf8EUobHMHHygbtTVyDS0PSYlR4L";
-  var new_temp = req.body.temp;
+  var new_temp = req.params.temp;
   var temp, hvac;
   request({
     method: "GET", 
@@ -30,8 +32,8 @@ router.post('/nest_update_temp', function(req, res, next) {
       if (body) { console.log("Received a body from Nest"); }
     });
       console.log("Nest has been updated...");
-      res.end();
   });
+  res.end();
 });
     
 
